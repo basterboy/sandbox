@@ -1,15 +1,11 @@
-# FROM alpine:3.18.4
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
 
-# RUN apk add --no-cache nginx \
-#     && ln -sf /dev/stdout /var/log/nginx/access.log \
-#     && ln -sf /dev/stderr /var/log/nginx/error.log
+# Set the working directory in the container
+WORKDIR /app
 
-# COPY default.conf /etc/nginx/http.d/
-# COPY index.html /var/www/localhost/htdocs/
+# Install the Python dependencies
+RUN pip install --no-cache-dir flask
 
-# EXPOSE 80
-
-# CMD ["nginx", "-g", "daemon off;"]
-FROM scratch
-COPY hello /
-CMD ["/hello"]
+# Define the command to run your application
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
