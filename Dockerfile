@@ -1,11 +1,12 @@
-# Use an official Python runtime as the base image
-FROM python:3.9-slim-buster
+FROM alpine:3.18.4
 
-# Set the working directory in the container
-WORKDIR /app
+RUN apk add --no-cache nginx \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 
-# Install the Python dependencies
-RUN pip install --no-cache-dir flask
+COPY default.conf /etc/nginx/http.d/
+COPY index.html /var/www/localhost/htdocs/
 
-# Define the command to run your application
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
